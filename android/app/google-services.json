@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "439891507756",
+    "firebase_url": "https://deliveryportal-1ab91-default-rtdb.firebaseio.com",
+    "project_id": "deliveryportal-1ab91",
+    "storage_bucket": "deliveryportal-1ab91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439891507756:android:7dd8b316f08e2ceafaaf89",
+        "android_client_info": {
+          "package_name": "com.example.deliveryportal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439891507756-9vjfto78fkc2d3gt3s93jvtjnd0e76e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCatJOITcsPFMWIzPHFoQ2X-kYBTqVWskk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439891507756-9vjfto78fkc2d3gt3s93jvtjnd0e76e0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439891507756:android:d955316bdacafb8bfaaf89",
+        "android_client_info": {
+          "package_name": "com.example.deliveryportal_driver_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439891507756-9vjfto78fkc2d3gt3s93jvtjnd0e76e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCatJOITcsPFMWIzPHFoQ2X-kYBTqVWskk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439891507756-9vjfto78fkc2d3gt3s93jvtjnd0e76e0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
