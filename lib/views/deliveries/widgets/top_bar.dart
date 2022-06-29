@@ -18,16 +18,16 @@ class _TopBarState extends State<TopBar> {
   Widget build(BuildContext context) {
     final vm = Provider.of<DriverViewModel>(context);
     return SliverAppBar(
-              backgroundColor: Color.fromARGB(255, 10, 21, 43),
-              shadowColor: Colors.amber,
-              expandedHeight: 200.0,
+              backgroundColor: Colors.white,
+              //shadowColor: Colors.amber,
+              expandedHeight: 400.0,
               elevation: 8.0,
               floating: false,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25))),
-              title: Text("Deliveries"),
+              title: Text("Deliveries",style: TextStyle(color: Colors.black),),
               centerTitle: true,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -42,11 +42,11 @@ class _TopBarState extends State<TopBar> {
                         height: 100,
                         child: ListTile(
                          // tileColor: Colors.white,
-                          leading: Icon(Icons.person_outline_rounded,color: Colors.white,size: 50,),
+                          leading: Icon(Icons.person_outline_rounded,color: Colors.black,size: 50,),
                           title: CustomText(
                             text: "Michael Vasconcelos",
                             size: 20,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           subtitle: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -57,7 +57,7 @@ class _TopBarState extends State<TopBar> {
                                 CustomText(
                                   text: "Total Deliveries: ${vm.deliveryList.length}",
                                   size: 15,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ],
                             ),
@@ -66,7 +66,7 @@ class _TopBarState extends State<TopBar> {
                                 CustomText(
                                   text: "Completed Deliveries: 0",
                                   size: 15,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ],
                             ),

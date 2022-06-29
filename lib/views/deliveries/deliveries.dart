@@ -39,8 +39,8 @@ class _DeliveryPageState extends State<DeliveryPage> {
     Container(
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        color: Color(0xff0E1420),
+        borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -83,6 +83,18 @@ class _DeliveryPageState extends State<DeliveryPage> {
         },
         body: loading ? CircularProgressIndicator() : 
          Container(
+          // decoration: BoxDecoration(
+          //   //color: Colors.white,
+          //  // borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
+          //   // boxShadow: [
+          //   //   BoxShadow(
+          //   //     color: Colors.grey.withOpacity(0.5),
+          //   //     spreadRadius: 5,
+          //   //     blurRadius: 7,
+          //   //     offset: Offset(0, 3), // changes position of shadow
+          //   //   ),
+          //   // ],
+          // ),
           child: ListView.builder(
             itemCount: vm.deliveryList.length,
             itemBuilder: (BuildContext context, int index) {

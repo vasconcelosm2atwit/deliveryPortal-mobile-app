@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _pages = [
+    CompletedDeliveryPage(),
     DeliveryPage(),
-    DriverPage(),
     ScanDeliveryPage()
   ];
 
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     final vm = Provider.of<DriverViewModel>(context);
     //Driver drivers = Provider.of<DriverViewModel>(context).driver;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xff0E1420) ,
 
       // appBar: AppBar(
       //   backgroundColor: Colors.deepPurple[300],
@@ -67,9 +67,7 @@ class _HomePageState extends State<HomePage> {
       // ),
       //drawer: _drawer(),
       bottomNavigationBar: CurvedNavigationBar(
-        color: Colors.lightBlue,
-       backgroundColor: Colors.transparent,
-       //buttonBackgroundColor: Colors.white,
+       backgroundColor: Color(0xff0E1420) ,
        index: pageIndex,
        onTap: (index) => {
          setState(() {
@@ -78,11 +76,10 @@ class _HomePageState extends State<HomePage> {
        },
         
         items: [
-        const Icon(Icons.person, size: 30, color: Colors.white),
-        const Icon(Icons.home, size: 30, color: Colors.white),
-        const Icon(Icons.settings, size: 30, color: Colors.white),
-        ],
-      
+        const Icon(Icons.home, size: 30),
+        const Icon(Icons.person, size: 30),
+        const Icon(Icons.settings, size: 30),
+      ],
       ),
       body: SafeArea(
         child: _pages[pageIndex],

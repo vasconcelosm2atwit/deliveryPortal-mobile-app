@@ -7,7 +7,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/animation.dart';
 
 import 'deliveries/widgets/open_container.dart';
-import 'widgets/driver_page.dart';
+import 'driver/driver_page.dart';
 
 class ScanDeliveryPage extends StatefulWidget {
   const ScanDeliveryPage({Key? key}) : super(key: key);
@@ -40,10 +40,7 @@ class _ScanDeliveryPageState extends State<ScanDeliveryPage> {
         title: Text("Scan Delivery"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DriverPage()),
-                )
+          onPressed: () => Navigator.pop(context),
         ),
       ),
 
@@ -67,7 +64,7 @@ class _ScanDeliveryPageState extends State<ScanDeliveryPage> {
                 closedColor: Theme.of(context).cardColor,
                 closedElevation: 0.0,
                 openElevation: 4.0,
-                transitionDuration: Duration(milliseconds: 1500),
+                transitionDuration: Duration(milliseconds: 3500),
                 openBuilder: (BuildContext context, VoidCallback _) => DriverPage(),
                 closedBuilder: (BuildContext _, VoidCallback openContainer) {
                   return ListTile(
