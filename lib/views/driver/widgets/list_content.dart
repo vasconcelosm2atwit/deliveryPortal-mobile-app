@@ -107,13 +107,20 @@ class _ListContentState extends State<ListContent> {
                 Row(
                   children: [
                   IconButton(
-                    icon: Icon(Icons.phone,color: Colors.blue, size: 20),
+                    icon: Icon(Icons.phone,color: Colors.blue, size: 25),
                     onPressed: (){
                       Provider.of<DriverViewModel>(context, listen: false).deliveryList[0].status = "completed";
                     },
                   ),
-                  SizedBox(width: 10),
-                  Icon(Icons.message,color: Colors.blue,size: 20),
+                  SizedBox(width: 20),
+                  Icon(Icons.message,color: Colors.blue,size: 25),
+                  SizedBox(width: 20),
+                  IconButton(
+                    icon: Icon(Icons.map ,color: Colors.blue,size: 25),
+                    onPressed: (){
+                      launchWaze(widget.delivery.address);
+                    },
+                  ),
                 ],)
                 
               ],
@@ -136,7 +143,7 @@ class _ListContentState extends State<ListContent> {
                   return  CircleAvatar(
               radius: 35.0,
               backgroundColor: widget.index != 0 ? Colors.grey : Colors.green,
-              child: Text(widget.delivery.status == "completed" ? "Done" : "Start",
+              child: Text(widget.delivery.status == "completed" ? "Done" : "Scan",
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

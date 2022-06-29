@@ -49,7 +49,6 @@ class _DeliveryContentState extends State<DeliveryContent> {
    // await launchRl(fallbackUrl, forceSafariVC: false, forceWebView: false);
    print(e);
   }
-
   }
 
 

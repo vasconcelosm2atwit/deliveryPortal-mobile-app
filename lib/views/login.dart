@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Row(
                 children: [
-                  Text("Welcome back to the admin panel.",
+                  Text("Please Login to start deliveries.",
                       style: GoogleFonts.roboto(
                           fontSize: 16, fontWeight: FontWeight.w500)),
                 ],
@@ -157,13 +157,13 @@ class _LoginPageState extends State<LoginPage> {
                           fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
                 ),
-                Text('Login Page'),
-                TextButton(
-                  child: Text('Login'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home');
-                  },
-                ),
+                //Text('Login Page'),
+                // TextButton(
+                //   child: Text('Login'),
+                //   onPressed: () {
+                //     Navigator.pushNamed(context, '/home');
+                //   },
+                // ),
               ],
             ),
           )

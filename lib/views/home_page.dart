@@ -13,6 +13,7 @@ import '../models/driver_model.dart';
 import '../services/auth.dart';
 import '../view_model/driver_view_model.dart';
 import 'driver/driver_page.dart';
+import 'widgets/settings_page.dart';
 
 class HomePage extends StatefulWidget {
   //User? user;
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _pages = [
     DeliveryPage(),
     DriverPage(),
-    ScanDeliveryPage()
+    SettingsPage()
   ];
 
 
