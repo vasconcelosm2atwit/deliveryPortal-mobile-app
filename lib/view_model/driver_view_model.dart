@@ -48,6 +48,7 @@ class DriverViewModel extends ChangeNotifier {
     _currentListTitle = value;
     notifyListeners();
   }
+  //GOOGLE MAP API => AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E
 
   Future<void> getDriver() async{
     _driver= await driverService.getDriver(_uuid);
@@ -71,6 +72,25 @@ class DriverViewModel extends ChangeNotifier {
     print(_currentItemList[0].name);
     notifyListeners();
   }
+   Future<void> getTopItem() async{
+    Delivery delivery = _displayList[0];
+    if(delivery.items == null || delivery.items!.isEmpty){
+      print("NO ITEMS");
+      return;
+    }
+    
+    List<Item> temp = [];
+    for(var item in delivery.items!){
+      var currentItem = await driverService.getItem(item);
+      temp.add(currentItem);
+    }
+
+    _currentItemList = temp;
+    print(_currentItemList[0].name);
+    notifyListeners();
+  }
+
+
 
   Future<void> updateItem(itemID, type) async {
     switch(type){

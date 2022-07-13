@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_import, unused_import,implementation_imports, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_constructors
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:deliveryportal_driver_app/views/completed_page.dart';
 import 'package:deliveryportal_driver_app/views/deliveries/deliveries.dart';

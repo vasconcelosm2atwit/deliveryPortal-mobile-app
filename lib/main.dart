@@ -1,10 +1,6 @@
-import 'package:deliveryportal_driver_app/views/home_page.dart';
-import 'package:deliveryportal_driver_app/views/login.dart';
 import 'package:deliveryportal_driver_app/views/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 
 
@@ -25,7 +21,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => MainPage(),

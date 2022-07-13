@@ -1,4 +1,6 @@
 
+// ignore_for_file: file_names, unnecessary_import, unused_import,implementation_imports, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_constructors
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';

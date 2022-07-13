@@ -39,6 +39,9 @@ dependencies:
   url_launcher: ^6.1.4
   geolocator: ^9.0.0
   flutter_barcode_scanner: ^2.0.0
+  custom_navigation_bar: ^0.8.2
+  percent_indicator: ^4.2.2
+  timeline_tile: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

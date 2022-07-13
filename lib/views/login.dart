@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_import, unused_import,implementation_imports, non_constant_identifier_names, avoid_unnecessary_containers, prefer_const_constructors
+
 import 'package:deliveryportal_driver_app/view_model/driver_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

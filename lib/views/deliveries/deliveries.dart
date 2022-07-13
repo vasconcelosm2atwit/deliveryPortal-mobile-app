@@ -7,8 +7,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/delivery_model.dart';
+import '../../services/custom_text.dart';
 import '../../view_model/driver_view_model.dart';
+import 'widgets/deliveryList.dart';
 import 'widgets/delivery_content.dart';
+import 'widgets/head_panel.dart';
 
 class DeliveryPage extends StatefulWidget {
   const DeliveryPage({Key? key}) : super(key: key);
@@ -22,103 +25,113 @@ class _DeliveryPageState extends State<DeliveryPage> {
   // @override
   void initState() {
     super.initState();
-    
+
     // SchedulerBinding.instance.addPostFrameCallback((_) {
     //     Provider.of<DriverViewModel>(context, listen: false).getDeliveries();
     //     loading = false;
     // });
 
-   // print(Provider.of<DriverViewModel>(context).deliveryList);
-    
+    // print(Provider.of<DriverViewModel>(context).deliveryList);
   }
+
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<DriverViewModel>(context);
-    return 
-    
-    Container(
-      margin: EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: Color(0xff0E1420),
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
+    return Scaffold(
+      backgroundColor: const Color(0xff080814),
+      appBar: AppBar(
+        title: const CustomText(
+          text: "Deliveries",
+          size: 30,
+          color: Colors.white,
+          weight: FontWeight.bold,
+        ),
+        backgroundColor: const Color(0xff080613),
+        centerTitle: true,
+        elevation: 2,
       ),
-      child: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            TopBar()
-            // SliverAppBar(
-            //   backgroundColor: Colors.blueAccent,
-            //   expandedHeight: 200.0,
-            //   floating: true,
-            //   shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.only(
-            //           bottomLeft: Radius.circular(25),
-            //           bottomRight: Radius.circular(25))),
-            //   title: Text("Delivery Page"),
-            //   pinned: true,
-            //   flexibleSpace: FlexibleSpaceBar(
-            //     background:Center(
-            //       child: Container(
-            //         child: Text("Delivery Page22222 ${vm.deliveryList.length}"),
-            //       ),
-            //     ),
-            //   ),
-            //   actions: [
-            //     IconButton(
-            //       icon: Icon(Icons.add),
-            //       onPressed: () {},
-            //     ),
-            //   ],
-            // ),
-          ];
-        },
-        body: loading ? CircularProgressIndicator() : 
-         Container(
-          // decoration: BoxDecoration(
-          //   //color: Colors.white,
-          //  // borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
-          //   // boxShadow: [
-          //   //   BoxShadow(
-          //   //     color: Colors.grey.withOpacity(0.5),
-          //   //     spreadRadius: 5,
-          //   //     blurRadius: 7,
-          //   //     offset: Offset(0, 3), // changes position of shadow
-          //   //   ),
-          //   // ],
-          // ),
-          child: ListView.builder(
-            itemCount: vm.deliveryList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return DeliveryContent(index: index, delivery: vm.deliveryList[index]);
-              // ListTile(
-              //   leading: Icon(Icons.account_circle),
-              //   trailing: Icon(Icons.keyboard_arrow_right),
-              //   dense: true,
-              //   tileColor: Colors.white,
-              //   hoverColor: Colors.amber,
-              //   title: Text("Delivery Page"),
-              //   contentPadding: EdgeInsets.all(10),
-              //   subtitle: Container(
-              //     height: 100,
-              //     decoration:
-              //         BoxDecoration(border: Border.all(color: Colors.black)),
-              //     child: Text("Delivery Page"),
-              //   ),
+      body: Container(
+          child: Column(children: [
+        HeadPanel(),
+        SizedBox(height: 30),
 
-              // );
-            },
+        /// badget icon with text
+
+        Expanded(
+          child: Container(
+            child: Column(mainAxisSize: MainAxisSize.max, children: [
+              Row(
+                children: [
+                  CustomText(
+                    text: "Today Deliveries",
+                    size: 18,
+                    color: Colors.white,
+                    weight: FontWeight.bold,
+                  )
+                ],
+              ),
+              DeliveryList(),
+            ]),
           ),
         ),
-      ),
+
+        /// text with a circle
+        ///
+
+        // expansion tile
+        // ExpansionTile(
+        //   trailing: Icon(Icons.keyboard_arrow_down, color: Colors.white),
+        //   leading: Icon(
+        //     Icons.person,
+        //     color: Colors.white,
+        //   ),
+        //   title: CustomText(
+        //     text: "Today's Deliveries",
+        //     size: 18,
+        //     color: Colors.white,
+        //   ),
+        //   subtitle: CustomText(
+        //     text: "Total Deliveries: ${vm.deliveryListCount}",
+        //     size: 15,
+        //     color: Colors.white,
+        //   ),
+        //   children: [
+        //     CustomText(
+        //       text: "Total Deliveries: ${vm.deliveryListCount}",
+        //       size: 15,
+        //       color: Colors.white,
+        //     ),
+        //   ],
+        // ),
+        // ExpansionTile(
+        //   title: const CustomText(
+        //     text: "Today's Deliveries",
+        //     size: 18,
+        //     color: Colors.white,
+        //   ),
+        //   children: [
+        //     CustomText(
+        //       text: "Total Deliveries: ${vm.deliveryListCount}",
+        //       size: 15,
+        //       color: Colors.white,
+        //     ),
+        //   ],
+        // ),
+        // ExpansionTile(
+        //   title: const CustomText(
+        //     text: "Today's Deliveries",
+        //     size: 18,
+        //     color: Colors.white,
+        //   ),
+        //   children: [
+        //     CustomText(
+        //       text: "Total Deliveries: ${vm.deliveryListCount}",
+        //       size: 15,
+        //       color: Colors.white,
+        //     ),
+        //   ],
+        // ),
+      ])),
     );
   }
 }
