@@ -63,14 +63,18 @@ class _DeliveryPageState extends State<DeliveryPage> {
               Row(
                 children: [
                   CustomText(
-                    text: "Today Deliveries",
+                    text: vm.currentListTitle,
                     size: 18,
                     color: Colors.white,
                     weight: FontWeight.bold,
                   )
                 ],
               ),
-              DeliveryList(),
+              // ChangeNotifierProvider<DriverViewModel>.value(
+              //   value: vm,
+              //   child: DeliveryList(),
+              // ),
+              DeliveryList(delivery_list: vm.displayList),
             ]),
           ),
         ),

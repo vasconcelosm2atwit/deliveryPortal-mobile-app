@@ -17,6 +17,7 @@ import '../services/auth.dart';
 import '../view_model/driver_view_model.dart';
 import 'deliveries/CurrentDelivery.dart';
 import 'driver/driver_page.dart';
+import 'widgets/settings_page.dart';
 
 class HomePage2 extends StatefulWidget {
   //User? user;
@@ -53,7 +54,7 @@ class _HomePage2State extends State<HomePage2> {
   final List<Widget> _pages = [
     const CurrentDeliveryPage(),
     const DeliveryPage(),
-    const ScanDeliveryPage()
+    const SettingsPage()
   ];
 
   @override

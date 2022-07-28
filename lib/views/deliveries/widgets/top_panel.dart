@@ -27,11 +27,12 @@ class _TopPanelState extends State<TopPanel> {
           lineWidth: 15.0,
           percent: vm.completedDeliveriesCount / vm.deliveryListCount,
           center: CustomText(
-            text: "3/28",
+            text:
+                "${(vm.completedDeliveriesCount / vm.deliveryListCount * 100).toStringAsFixed(0)}%",
             size: 18,
             color: Colors.white,
           ),
-          progressColor: Colors.purple,
+          progressColor: Colors.green,
         ),
         SizedBox(width: 20),
         Container(
@@ -55,8 +56,7 @@ class _TopPanelState extends State<TopPanel> {
               color: Colors.white,
             ),
             CustomText(
-              text:
-                  "Canceled: ${vm.deliveryListCount - vm.completedDeliveriesCount}",
+              text: "Canceled: ${vm.canceledDeliveriesCount}",
               size: 15,
               color: Colors.white,
             ),

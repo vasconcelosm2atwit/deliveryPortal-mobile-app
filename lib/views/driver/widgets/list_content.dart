@@ -58,7 +58,6 @@ class _ListContentState extends State<ListContent> {
    // await launchRl(fallbackUrl, forceSafariVC: false, forceWebView: false);
    print(e);
   }
-
   }
 
   void updateItemScanned(String itemID) async {
@@ -139,7 +138,7 @@ class _ListContentState extends State<ListContent> {
                   //     value: DriverViewModel(),
                   //     child: ScanCurrentDelivery(currentDelivery: widget.delivery));
                   print("uuid ${vm.uuid}");
-                  return ScanCurrentDelivery(items: vm.currentItemList, onScan: updateItemScanned);
+                  return ScanCurrentDelivery(items: vm.currentItemList, onScan: updateItemScanned, delivery: widget.delivery);
                 },
                 closedBuilder: (BuildContext _, VoidCallback openContainer) {
                   return  CircleAvatar(

@@ -99,7 +99,7 @@ class _HeadPanelState extends State<HeadPanel> {
                     ),
                     IconButton(
                         onPressed: () {
-                          vm.setDisplayList("cancelled");
+                          vm.setDisplayList("canceled");
                         },
                         icon: const Icon(Icons.cancel)),
                   ],

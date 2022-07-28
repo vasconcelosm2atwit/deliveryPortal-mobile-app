@@ -5,12 +5,12 @@ import '../models/driver_model.dart';
 import '../models/item_model.dart';
 
 class DriverService {
-
   DriverService();
-  
+
   // get driver from firestore
   Future<List<Driver>> getDrivers() async {
-    final QuerySnapshot<Map<String, dynamic>> drivers = await getCollections('drivers');
+    final QuerySnapshot<Map<String, dynamic>> drivers =
+        await getCollections('drivers');
     final List<Driver> driversList = [];
     drivers.docs.forEach((doc) {
       print(doc);
@@ -21,10 +21,7 @@ class DriverService {
 
   // get item by uid
   Future<DocumentSnapshot> getItemByUuid(String uuid) async {
-    return await FirebaseFirestore.instance
-        .collection('items')
-        .doc(uuid)
-        .get();
+    return await FirebaseFirestore.instance.collection('items').doc(uuid).get();
   }
 
   Future<Item> getItem(String? uuid) async {
@@ -34,16 +31,24 @@ class DriverService {
 
   // update item using uid to scanned
   Future<void> updateItem(id, type) async {
-    await FirebaseFirestore.instance
-        .collection('items')
-        .doc(id)
-        .update({
-          type: true,
-      });
+    await FirebaseFirestore.instance.collection('items').doc(id).update({
+      type: true,
+    });
   }
 
+  // set a status for all items
+  Future<void> updateItemStatus(id, status) async {
+    await FirebaseFirestore.instance.collection('items').doc(id).set({
+      'confirmed': false,
+      'delivered': false,
+      'status': status,
+      'deliveryDriver': "",
+      'name': "TC@HOME"
+    });
+  }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getCollections(String collection) async {
+  Future<QuerySnapshot<Map<String, dynamic>>> getCollections(
+      String collection) async {
     return await FirebaseFirestore.instance.collection(collection).get();
   }
 
@@ -61,8 +66,18 @@ class DriverService {
         .get();
   }
 
-  Future<List<Delivery>> getAllDeliveries() async {
-    final QuerySnapshot<Map<String, dynamic>> deliveries = await getCollections('deliveries');
+  // get all deliveries from firestore with driver name Michelle Vasconcelos
+  Future<QuerySnapshot<Map<String, dynamic>>> getDeliveriesByDriver(
+      String driverEmail) async {
+    return await FirebaseFirestore.instance
+        .collection('deliveries')
+        .where('assignedDriver', isEqualTo: driverEmail)
+        .get();
+  }
+
+  Future<List<Delivery>> getAllDeliveriesByDriver(String driver) async {
+    final deliveries =
+        await getDeliveriesByDriver(driver);
     final List<Delivery> deliveryList = [];
     for (var doc in deliveries.docs) {
       deliveryList.add(Delivery.fromSnapshot(doc));
@@ -70,4 +85,20 @@ class DriverService {
     return deliveryList;
   }
 
+  Future<List<Delivery>> getAllDeliveries() async {
+    final QuerySnapshot<Map<String, dynamic>> deliveries =
+        await getCollections('deliveries');
+    final List<Delivery> deliveryList = [];
+    for (var doc in deliveries.docs) {
+      deliveryList.add(Delivery.fromSnapshot(doc));
+    }
+    return deliveryList;
+  }
+
+  // update delivery status
+  Future<void> updateDelivery(String id, String status) async {
+    await FirebaseFirestore.instance.collection('deliveries').doc(id).update({
+      'status': status,
+    });
+  }
 }

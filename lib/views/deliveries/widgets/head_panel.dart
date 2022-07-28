@@ -7,7 +7,7 @@ import '../../../view_model/driver_view_model.dart';
 
 class HeadPanel extends StatefulWidget {
   const HeadPanel({Key? key}) : super(key: key);
-
+  // Provider.of<DriverViewModel>(context, listen: false).deliveryList[0].status = "completed";
   @override
   State<HeadPanel> createState() => _HeadPanelState();
 }
@@ -49,51 +49,67 @@ class _HeadPanelState extends State<HeadPanel> {
           children: [
             // SizedBox(width: 10),
             Expanded(
-              child: Chip(
-                side: BorderSide(
-                  color: Colors.blue,
-                  width: 2,
-                ),
-                padding: EdgeInsets.all(0),
-                avatar: CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  child: Icon(Icons.today),
-                ),
-                backgroundColor: Colors.white,
-                label: CustomText(
-                  text: "Total: ${vm.deliveryListCount}       ",
-                  size: 12,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            //SizedBox(width: 10),
-            Expanded(
-              child: Chip(
-                side: BorderSide(
-                  color: Colors.purple,
-                  width: 2,
-                ),
-                padding: EdgeInsets.all(0),
-                avatar: CircleAvatar(
-                  radius: 100,
-                  backgroundColor: Colors.purple,
-                  child: Icon(
-                    Icons.list,
-                    color: Colors.white,
+              child: InkWell(
+                onTap: (() {
+                  Provider.of<DriverViewModel>(context, listen: false)
+                      .setDisplayList("to do");
+                }),
+                child: Chip(
+                  side: BorderSide(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
+                  padding: EdgeInsets.all(0),
+                  avatar: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Icon(Icons.today),
+                  ),
+                  backgroundColor: Colors.white,
+                  label: CustomText(
+                    text: "To do: ${vm.deliveryListCount}       ",
+                    size: 12,
+                    color: Colors.black,
                   ),
                 ),
-                backgroundColor: Colors.white,
-                label: CustomText(
-                  text: "To do: ${vm.completedDeliveriesCount}   ",
-                  size: 12,
-                  color: Colors.black,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: InkWell(
+                onTap: (() {
+                  Provider.of<DriverViewModel>(context, listen: false)
+                      .setDisplayList("completed");
+                }),
+                child: Chip(
+                  side: BorderSide(
+                    color: Colors.purple,
+                    width: 2,
+                  ),
+                  padding: EdgeInsets.all(0),
+                  avatar: CircleAvatar(
+                    radius: 100,
+                    backgroundColor: Colors.purple,
+                    child: Icon(
+                      Icons.list,
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                  label: CustomText(
+                    text: "Completed: ${vm.completedDeliveriesCount}   ",
+                    size: 12,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
-            //SizedBox(width: 10),
+            //SizedBox(width: 5),
             Expanded(
-              child: Container(
+              child: InkWell(
+                onTap: (() {
+                  Provider.of<DriverViewModel>(context, listen: false)
+                      .setDisplayList("canceled");
+                }),
                 // width: 100,
                 child: Chip(
                   side: BorderSide(
@@ -107,8 +123,7 @@ class _HeadPanelState extends State<HeadPanel> {
                   ),
                   backgroundColor: Colors.white,
                   label: CustomText(
-                    text:
-                        "Completed: ${vm.completedDeliveriesCount - vm.completedDeliveriesCount}",
+                    text: "Canceled: ${vm.canceledDeliveriesCount}",
                     size: 10,
                     color: Colors.black,
                   ),
@@ -230,7 +245,7 @@ class _HeadPanelState extends State<HeadPanel> {
             //     ]),
             //   ),
             // ),
-            SizedBox(width: 10),
+            //SizedBox(width: 10),
           ],
         )
       ],
