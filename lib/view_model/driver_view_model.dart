@@ -134,7 +134,7 @@ class DriverViewModel extends ChangeNotifier {
   Future<void> getDeliveries() async {
     //_deliveryList = await driverService.getAllDeliveries();
     _deliveryList =
-        await driverService.getAllDeliveriesByDriver("michael@email.com");
+        await driverService.getAllDeliveriesByDriver("michelle-vasconcelos@email.com");
     setDisplayList("todo");
     _loading_deliveries = false;
     notifyListeners();

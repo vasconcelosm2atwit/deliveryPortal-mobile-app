@@ -45,13 +45,20 @@ class _InitialScanPageState extends State<InitialScanPage> {
     String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         "#ff6666", "Cancel", false, ScanMode.DEFAULT);
     if (barcodeScanRes == item.id) {
-      // print("CORRECT");
+      print("CORRECT");
       setState(() {
         _scanResult = barcodeScanRes;
         widget.onScan(item.id!);
-        item.status = "scanned";
+        item.status = "ready";
       });
     }
+
+    print("CORRECT");
+      setState(() {
+        _scanResult = barcodeScanRes;
+        widget.onScan(item.id!);
+        item.status = "ready";
+      });
     print(barcodeScanRes);
   }
 

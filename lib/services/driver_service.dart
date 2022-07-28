@@ -38,12 +38,8 @@ class DriverService {
 
   // set a status for all items
   Future<void> updateItemStatus(id, status) async {
-    await FirebaseFirestore.instance.collection('items').doc(id).set({
-      'confirmed': false,
-      'delivered': false,
+    await FirebaseFirestore.instance.collection('items').doc(id).update({
       'status': status,
-      'deliveryDriver': "",
-      'name': "TC@HOME"
     });
   }
 

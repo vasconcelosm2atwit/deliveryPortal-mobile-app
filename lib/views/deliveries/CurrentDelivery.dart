@@ -535,7 +535,55 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
               InkWell(
                 onTap: () {
                   //Provider.of<DriverViewModel>(context, listen: false);
-                  if (currentDelivery.status == "started") {
+                  if(vm.completedDeliveriesCount == 1){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Warning Check Your Location"),
+                          content: Text(
+                              "It seems that you are not near this delivery's address, are you sure you want to continue?"),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("Yes"),
+                              onPressed: () {
+                               if (currentDelivery.status == "started") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ScanCurrentDelivery(
+                                            items: vm.currentItemList,
+                                            onScan: updateItemScanned,
+                                            delivery: currentDelivery)),
+                                  );
+                                  var count = 0;
+                                  for (var item in vm.currentItemList) {
+                                    if (item.status == "scanned") {
+                                      count++;
+                                    }
+                                  }
+                                  if (count == vm.currentItemList.length) {
+                                    vm.updateDelivery(currentDelivery.id, "scanned");
+                                  }
+                                  setState(() {
+                                  //hovered = hovered ? false : true;
+                                  scan_icon = Icons.check;
+                                });
+                                }
+                              },
+                            ),
+                            FlatButton(
+                              child: Text("No"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }else{
+                    if (currentDelivery.status == "started") {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -555,6 +603,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                     }
                   }
                   //vm.updateDelivery(currentDelivery.id, "scanned");
+                  }
                 },
                 child: TimelineTile(
                   alignment: TimelineAlign.start,
@@ -626,6 +675,10 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                                   vm.getDeliveries();
                                   vm.getTopItem();
                                   Navigator.of(context).pop();
+                                  setState(() {
+                                  //hovered = hovered ? false : true;
+                                  end_icon = Icons.check;
+                                });
                                 },
                               ),
                               FlatButton(

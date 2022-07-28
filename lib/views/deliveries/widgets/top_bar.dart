@@ -46,7 +46,7 @@ class _TopBarState extends State<TopBar> {
                          // tileColor: Colors.white,
                           leading: Icon(Icons.person_outline_rounded,color: Colors.black,size: 50,),
                           title: CustomText(
-                            text: "Michael Vasconcelos",
+                            text: "Michelle Vasconcelos",
                             size: 20,
                             color: Colors.black,
                           ),

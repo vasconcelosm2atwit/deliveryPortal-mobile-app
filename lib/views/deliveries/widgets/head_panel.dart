@@ -40,7 +40,7 @@ class _HeadPanelState extends State<HeadPanel> {
         ),
         SizedBox(height: 20),
         CustomText(
-          text: "Michael Vasconcelos",
+          text: "Michelle Vasconcelos",
           size: 18,
           color: Colors.white,
         ),
