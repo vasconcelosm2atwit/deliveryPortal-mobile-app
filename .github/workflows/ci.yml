@@ -11,28 +11,26 @@ jobs:
     steps:
       # checkout rep
     - uses: actions/checkout@v1
-      #setup java
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-      # install flutter action
     - uses: subosito/flutter-action@v1
       with:
           channel: 'beta'
-   # Get flutter dependencies.
+  # Get flutter dependencies.
+  # Check for any formatting issues in the code.
+  # Statically analyze the Dart code for any errors.
+  # Run widget tests for our flutter project.
+  # Build apk.
       name: Running Flutter dependencies
       run: | 
         flutter pub get
-    # Check for any formatting issues in the code.
-        flutter format --set-exit-if-changed .
-    # Statically analyze the Dart code for any errors.
-        flutter analyze .
-    # Run widget tests for our flutter project.
+        flutter format --set-exit-if-changed .   
+        flutter analyze .  
         flutter test
-    # Build apk.
         flutter build apk
     
-    # Upload generated apk to the artifacts.
+  # Upload generated apk to the artifacts.
       name: generate apk to artifacts
       uses: actions/upload-artifact@master
       with:
