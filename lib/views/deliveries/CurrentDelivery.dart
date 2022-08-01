@@ -375,7 +375,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                       content: Text(
                           "Are you sure you want to cancel this delivery?"),
                       actions: <Widget>[
-                        FlatButton(
+                        TextButton(
                           child: Text("Yes"),
                           onPressed: () {
                             vm.updateDelivery(currentDelivery.id, "canceled");
@@ -384,7 +384,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                             vm.getTopItem();
                           },
                         ),
-                        FlatButton(
+                        TextButton(
                           child: Text("No"),
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -461,7 +461,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                           content: Text(
                               "Are you sure you want to start this delivery?"),
                           actions: <Widget>[
-                            FlatButton(
+                            TextButton(
                               child: Text("Yes"),
                               onPressed: () {
                                 vm.updateDelivery(
@@ -474,7 +474,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                                 launchWaze(currentDelivery.address);
                               },
                             ),
-                            FlatButton(
+                            TextButton(
                               child: Text("No"),
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -544,7 +544,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                           content: Text(
                               "It seems that you are not near this delivery's address, are you sure you want to continue?"),
                           actions: <Widget>[
-                            FlatButton(
+                            TextButton(
                               child: Text("Yes"),
                               onPressed: () {
                                if (currentDelivery.status == "started") {
@@ -572,7 +572,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                                 }
                               },
                             ),
-                            FlatButton(
+                            TextButton(
                               child: Text("No"),
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -667,7 +667,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                             content: Text(
                                 "Are you sure you want to finish this delivery?"),
                             actions: <Widget>[
-                              FlatButton(
+                              TextButton(
                                 child: Text("Yes"),
                                 onPressed: () {
                                   vm.updateDelivery(
@@ -681,7 +681,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                                 });
                                 },
                               ),
-                              FlatButton(
+                              TextButton(
                                 child: Text("No"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
