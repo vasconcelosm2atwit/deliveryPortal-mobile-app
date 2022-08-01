@@ -25,8 +25,6 @@ jobs:
     - name: Running Flutter dependencies
       run: | 
         flutter pub get 
-        flutter analyze .  
-        flutter test
         flutter build apk
     
   # Upload generated apk to the artifacts.
@@ -35,3 +33,11 @@ jobs:
       with:
         name: apk-release
         path: build/app/outputs/bundle/release/app-release.apk
+    # Deploy firebase app dist
+    - name: Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        groups: testers
+        file: app/build/outputs/apk/release/app-release-unsigned.apk
