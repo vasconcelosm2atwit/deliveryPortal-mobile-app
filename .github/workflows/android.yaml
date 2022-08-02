@@ -24,7 +24,7 @@ jobs:
         tag: v1.0.${{github.run_number}}
         token: ${{secrets.TOKEN}}
     - name: upload artifacts to Firebase App Distribution
-      uses: wzieba/firebase-app-distribution-Github-action@v1
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
         appId: ${{secrets.FIREBASE_APP_ID}}
         token: ${{secrets.FIREBASE_TOKEN}}
