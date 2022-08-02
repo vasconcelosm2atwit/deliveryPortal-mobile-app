@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout rep
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+          channel: 'beta'
+  # Get flutter dependencies.
+  # Check for any formatting issues in the code.
+  # Statically analyze the Dart code for any errors.
+  # Run widget tests for our flutter project.
+  # Build apk.
+    - name: Running Flutter dependencies
+      run: | 
+        flutter pub get 
+        flutter build apk
+    
+  # Upload generated apk to the artifacts.
+    - name: generate apk to artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: apk-release
+        path: build/app/outputs/bundle/release/app-release.apk
+    # Deploy firebase app dist
+    - name: Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        groups: testers
+        file: app/build/outputs/apk/release/app-release-unsigned.apk
