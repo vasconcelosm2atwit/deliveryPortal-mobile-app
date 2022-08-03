@@ -282,8 +282,8 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
     );
   }
 
-  Widget currentDeliveryWidget(
-      vm, currentDelivery, start_icon, scan_icon, end_icon) {
+  Widget currentDeliveryWidget(DriverViewModel vm, Delivery currentDelivery,
+      start_icon, scan_icon, end_icon) {
     return Column(
       children: [
         CustomText(
@@ -419,10 +419,12 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
           child: Row(
             children: [
               Container(
-                child: CustomText(
-                  text: "Drop by the front door please!",
-                  size: 15,
-                  color: Colors.white54,
+                child: Flexible(
+                  child: CustomText(
+                    text: "${currentDelivery.instructions ?? ""}",
+                    size: 15,
+                    color: Colors.white54,
+                  ),
                 ),
               ),
             ],
@@ -452,17 +454,21 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                   // print(vm.currentItemList);
                   print("starting pos --------------------------------------");
                   //vm.checkLocationPermission();
-                  await vm.determineCurrentPosition();
+                  //await vm.determineCurrentPosition();
                   print("current pos --------------------------------------");
                   //print(vm.currentListTitle);
                   print("open route START");
                   //await vm.openroutetest();
+                  //vm.optimizationAddress();
+                  // vm.printDeliveries();
+                  // vm.testAddress();
+                  //vm.distanceInfoToLoc();
                   print("open rout END");
                   debugPrint(
                       "DEBUG PRINT --------------------------------------");
                   //vm.sendMessage();
                   print("send message END");
-                  vm.checkDistanceBetween();
+                  //vm.checkDistanceBetween();
                   //print(t);
                   print("send test END");
 
@@ -481,6 +487,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                               onPressed: () {
                                 vm.updateDelivery(
                                     currentDelivery.id, "started");
+                                vm.sendMessage();
                                 Navigator.of(context).pop();
                                 setState(() {
                                   //hovered = hovered ? false : true;
@@ -548,16 +555,17 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                 ),
               ),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   //Provider.of<DriverViewModel>(context, listen: false);
-                  if (vm.completedDeliveriesCount == 1) {
+                  await vm.distanceInfoToLoc();
+                  if (vm.curDist > 1) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Warning Check Your Location"),
                           content: Text(
-                              "It seems that you are not near this delivery's address, are you sure you want to continue?"),
+                              "It seems that you are not near this delivery's address, you are ${vm.curDist.round()} away from the location, are you sure you want to continue anyway?"),
                           actions: <Widget>[
                             TextButton(
                               child: Text("Yes"),

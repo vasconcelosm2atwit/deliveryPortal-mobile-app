@@ -26,6 +26,9 @@ class DriverViewModel extends ChangeNotifier {
   late List<Item> _allItems;
   late int itemsCount;
   late Position _currentPosition;
+  late double _curDist;
+  late int _curDistTime;
+  List<OptimizationRoute>? _outputDist;
 
   DriverViewModel() {
     _uuid = "";
@@ -40,6 +43,8 @@ class DriverViewModel extends ChangeNotifier {
     _currentDelivery = Delivery();
     _allItems = [];
     itemsCount = 0;
+    _curDist = 0;
+    _curDistTime = 0;
     _loading_items = true;
   }
 
@@ -64,6 +69,9 @@ class DriverViewModel extends ChangeNotifier {
   List<Item> get allItems => _allItems;
 
   bool get loadingItems => _loading_items;
+
+  double get curDist => _curDist;
+  int get curDistTime => _curDistTime;
 
   // You are not 5m near address, please double check that you are?
   //
@@ -115,6 +123,7 @@ class DriverViewModel extends ChangeNotifier {
     _currentItemList = temp;
 
     _currentDelivery = delivery;
+    await distanceInfoToLoc();
     //print(_currentItemList[0].name);
     notifyListeners();
   }
@@ -143,7 +152,27 @@ class DriverViewModel extends ChangeNotifier {
     //_deliveryList = await driverService.getAllDeliveries();
     _deliveryList = await driverService
         .getAllDeliveriesByDriver("michelle-vasconcelos@email.com");
+
+    int count = 0;
+    for (var delivery in _deliveryList) {
+      // print(delivery.address);
+      count = count + 1;
+      if (count % 2 == 0) {
+        delivery.instructions =
+            "Drop by the door, don't ring the door bell please!";
+      }
+      delivery.step_id = count;
+      delivery.latlng = await latlongFromAddress(delivery.address.toString());
+      //print(delivery.latlng);
+    }
+
+    _deliveryList = await routingOptimzation(_deliveryList);
+
     setDisplayList("todo");
+    for (var delivery in _displayList) {
+      print(delivery.instructions);
+      print(delivery.step_id);
+    }
     _loading_deliveries = false;
     notifyListeners();
   }
@@ -199,6 +228,7 @@ class DriverViewModel extends ChangeNotifier {
                 delivery.status == "started")
             .toList();
     }
+    _displayList.sort((a, b) => a.deliveryStep!.compareTo(b.deliveryStep!));
     notifyListeners();
   }
 
@@ -297,17 +327,44 @@ class DriverViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkDistanceBetween() async {
+  Future<void> checkDistanceBetween(List<double> latlong) async {
     // _currentPosition = await _determinePosition();
     //AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E
-    GeoData data = await Geocoder2.getDataFromAddress(
-        address: "92 devon street, boston, MA",
-        googleMapApiKey: "AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E");
-    print(data.address);
-    print(data.latitude);
-    print(data.longitude);
-    print(data.street_number);
+    // GeoData data = await Geocoder2.getDataFromAddress(
+    //     address: "92 devon street, boston, MA",
+    //     googleMapApiKey: "AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E");
+    // print(data.address);
+    // print(data.latitude);
+    // print(data.longitude);
+    // print(data.street_number);
     //Geolocator.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude)
+    var current_pos = await _determinePosition();
+    double distance = Geolocator.distanceBetween(
+        current_pos.latitude, current_pos.longitude, latlong[0], latlong[1]);
+  }
+
+  Future<void> optimizationAddress() async {
+    for (var data in _outputDist!) {
+      for (var step in data.steps!) {
+        print("step_id: ${step.id}");
+        print("type: ${step.type}");
+        print("arrival: ${step.arrival}");
+        print("duration: ${step.duration}");
+        String address = await addressesFromLatLng(
+            step.location.latitude, step.location.longitude);
+        print("address: $address");
+        print("-----------------------------------------------------");
+      }
+    }
+  }
+
+  Future<String> addressesFromLatLng(double lat, double lng) async {
+    GeoData data = await Geocoder2.getDataFromCoordinates(
+        latitude: lat,
+        longitude: lng,
+        googleMapApiKey: "AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E");
+
+    return data.address;
   }
 
   Future<Position> _determinePosition() async {
@@ -347,82 +404,67 @@ class DriverViewModel extends ChangeNotifier {
     return await Geolocator.getCurrentPosition();
   }
 
-  Future<void> openroutetest() async {
+  Future<void> testAddress() async {
+    GeoData data = await Geocoder2.getDataFromAddress(
+        address: "200 pearl street, Boston, MA",
+        googleMapApiKey: "AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E");
+    print(data.address);
+  }
+
+  Future<List<double>> latlongFromAddress(String fromAddress) async {
+    print("starting: $fromAddress");
+    try {
+      GeoData data = await Geocoder2.getDataFromAddress(
+          address: fromAddress,
+          googleMapApiKey: "AIzaSyD6O4fG6KI0TTi_5gMENiOb_terHb9sb2E");
+      print("ran this through for address $fromAddress");
+      print({
+        "latitude": data.latitude,
+        "longitude": data.longitude,
+      });
+      return [data.latitude, data.longitude];
+    } catch (e) {
+      print(e);
+    }
+    return [];
+    // print(data.address);
+    // print(data.latitude);
+    // print(data.longitude);
+    // print(data.street_number);
+  }
+
+  void printDeliveries() {
+    for (var delivery in _displayList) {
+      print(delivery.step_id);
+      print(delivery.deliveryStep);
+      print(delivery.address);
+    }
+  }
+
+  Future<List<Delivery>> routingOptimzation(List<Delivery> deliveries) async {
     final OpenRouteService client = OpenRouteService(
-        apiKey: '5b3ce3597851110001cf6248f451b71dbef74a92872cf209dbec6120');
-
-    // Example coordinates to test between
-    const double startLat = 37.4220698;
-    const double startLng = -122.0862784;
-    const double endLat = 37.4111466;
-    const double endLng = -122.0792365;
-
-    // Form Route between coordinates
-    final List<ORSCoordinate> routeCoordinates =
-        await client.directionsRouteCoordsGet(
-      startCoordinate: ORSCoordinate(latitude: startLat, longitude: startLng),
-      endCoordinate: ORSCoordinate(latitude: endLat, longitude: endLng),
-    );
-
-    // Print the route coordinates
-    print("route coordinates: ");
-    routeCoordinates.forEach(print);
-    print("------------OPTIMIZATION------------------");
+        apiKey: '5b3ce3597851110001cf6248f451b71dbef74a92872cf209dbec6120',
+        profile: ORSProfile.drivingCar);
     List<double> home = [42.309490, -71.078680];
-    List<double> school = [42.337255, -71.096552];
-    List<double> ben = [42.331047, -71.117715];
-    List<double> newyork = [40.730610, -73.935242];
-    List<double> losangeles = [42.315609, -71.112995];
-
+    print("----");
+    for (var delivery in deliveries) {
+      print("step_id: ${delivery.step_id}");
+      print(delivery.deliveryStep);
+      print(delivery.address);
+    }
     List<VroomJob> jobs = [];
     List<int>? DeliveryIDs = [1];
-    VroomJob job = VroomJob(
-      id: 1,
-      location: ORSCoordinate(latitude: home[0], longitude: home[1]),
-      service: 300,
-      skills: [1],
-      amount: [1],
-      //delivery: DeliveryIDs,
-    );
-    VroomJob job2 = VroomJob(
-      id: 2,
-      location: ORSCoordinate(latitude: school[0], longitude: school[1]),
-      service: 300,
-      skills: [1],
-      amount: [1],
-      //delivery: DeliveryIDs,
-    );
-    VroomJob job3 = VroomJob(
-      id: 3,
-      location: ORSCoordinate(latitude: ben[0], longitude: ben[1]),
-      //delivery: DeliveryIDs,
-      service: 300,
-      skills: [1],
-      amount: [1],
-    );
-    VroomJob job4 = VroomJob(
-      id: 4,
-      location: ORSCoordinate(latitude: newyork[0], longitude: newyork[1]),
-      // delivery: DeliveryIDs,
-      service: 300,
-      skills: [14],
-      amount: [1],
-    );
-    VroomJob job5 = VroomJob(
-      id: 5,
-      location:
-          ORSCoordinate(latitude: losangeles[0], longitude: losangeles[1]),
-      //delivery: DeliveryIDs,
-      service: 300,
-      skills: [14],
-      amount: [1],
-    );
-
-    jobs.add(job);
-    jobs.add(job2);
-    jobs.add(job3);
-    jobs.add(job4);
-    jobs.add(job5);
+    for (var i in deliveries) {
+      if (i.latlng!.isNotEmpty) {
+        jobs.add(VroomJob(
+            id: i.step_id!,
+            location:
+                ORSCoordinate(latitude: i.latlng![0], longitude: i.latlng![1]),
+            service: 300,
+            skills: [1],
+            amount: [1]));
+      }
+    }
 
     List<VroomVehicle> vehicles = [];
     VroomVehicle vehicle = VroomVehicle(
@@ -430,18 +472,164 @@ class DriverViewModel extends ChangeNotifier {
         start: ORSCoordinate(latitude: home[0], longitude: home[1]),
         end: ORSCoordinate(latitude: home[0], longitude: home[1]),
         capacity: [5],
-        skills: [1, 14]);
+        skills: [1]);
     vehicles.add(vehicle);
 
     OptimizationData output =
         await client.optimizationDataPost(jobs: jobs, vehicles: vehicles);
-    print("optimaztion data: ");
-    print(output.toJson());
-    //print(output.routes);
-    print("---------22222----------------------");
-    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    String prettyprint = encoder.convert(output);
-    debugPrint(prettyprint);
+
+    for (var route in output.routes) {
+      int start = 0;
+      for (var step in route.steps!) {
+        for (var delivery in deliveries) {
+          if (delivery.step_id == step.id) {
+            start = start + 1;
+            delivery.deliveryStep = start;
+          }
+        }
+      }
+    }
+    print("----");
+    for (var delivery in deliveries) {
+      print("step_id: ${delivery.step_id}");
+      print(delivery.deliveryStep);
+      print(delivery.address);
+    }
+    print("----");
+    notifyListeners();
+
+    return deliveries;
+    // setup all the latlongs for the deliveries, then setup the step for each delivery throught eh opt
+  }
+
+  Future<void> distanceInfoToLoc() async {
+    final OpenRouteService client = OpenRouteService(
+        apiKey: '5b3ce3597851110001cf6248f451b71dbef74a92872cf209dbec6120',
+        profile: ORSProfile.drivingCar);
+
+    var current_location = await _determinePosition();
+    // Example coordinates to test between
+    // print("current_location: $current_location");
+    // print(" delivery_location: ${_currentDelivery.latlng.toString()}");
+    double startLat = current_location.latitude;
+    double startLng = current_location.longitude;
+    double endLat = _currentDelivery.latlng![0];
+    double endLng = _currentDelivery.latlng![1];
+
+    // Form Route between coordinates
+    // final List<ORSCoordinate> routeCoordinates =
+    //     await client.directionsRouteCoordsGet(
+    //   startCoordinate: ORSCoordinate(latitude: startLat, longitude: startLng),
+    //   endCoordinate: ORSCoordinate(latitude: endLat, longitude: endLng),
+    // );
+
+    // 26min 17.6 mil
+    // 26491.6, 1811.6 = duration
+
+    GeoJsonFeatureCollection cord = await client.directionsRouteGeoJsonGet(
+        startCoordinate: ORSCoordinate(latitude: startLat, longitude: startLng),
+        endCoordinate: ORSCoordinate(latitude: endLat, longitude: endLng));
+
+    double dist = cord.features[0].properties['summary']['distance'];
+    double distance = convertKmsToMiles(dist);
+    double t = cord.features[0].properties['summary']['duration'];
+    Duration cur = Duration(seconds: t.toInt());
+    int time = cur.inMinutes;
+
+    _curDist = distance;
+    _curDistTime = time;
+    notifyListeners();
+    // cord.features.forEach((element) {
+    //   print(element.properties);
+    //   print(element.properties['summary']['distance']);
+    //   print(element.properties['summary']['duration']);
+    //   Duration cur =
+    //       Duration(seconds: element.properties['summary']['duration'].toInt());
+    //   print("Minutes in minutes: ${cur.inMinutes}");
+    //   print(
+    //       "Distance in miles: ${convertKmsToMiles(element.properties['summary']['distance'])}");
+    // });
+    // Print the route coordinates
+    // print("route coordinates: ");
+    // routeCoordinates.forEach(print);
+    // print("------------OPTIMIZATION------------------");
+    // List<double> home = [42.309490, -71.078680];
+    // List<double> school = [42.337255, -71.096552];
+    // List<double> ben = [42.331047, -71.117715];
+    // List<double> newyork = [40.730610, -73.935242];
+    // List<double> losangeles = [42.315609, -71.112995];
+
+    // List<VroomJob> jobs = [];
+    // List<int>? DeliveryIDs = [1];
+    // VroomJob job = VroomJob(
+    //   id: 1,
+    //   location: ORSCoordinate(latitude: home[0], longitude: home[1]),
+    //   service: 300,
+    //   skills: [1],
+    //   amount: [1],
+    //   //delivery: DeliveryIDs,
+    // );
+    // VroomJob job2 = VroomJob(
+    //   id: 2,
+    //   location: ORSCoordinate(latitude: school[0], longitude: school[1]),
+    //   service: 300,
+    //   skills: [1],
+    //   amount: [1],
+    //   //delivery: DeliveryIDs,
+    // );
+    // VroomJob job3 = VroomJob(
+    //   id: 3,
+    //   location: ORSCoordinate(latitude: ben[0], longitude: ben[1]),
+    //   //delivery: DeliveryIDs,
+    //   service: 300,
+    //   skills: [1],
+    //   amount: [1],
+    // );
+    // VroomJob job4 = VroomJob(
+    //   id: 4,
+    //   location: ORSCoordinate(latitude: newyork[0], longitude: newyork[1]),
+    //   // delivery: DeliveryIDs,
+    //   service: 300,
+    //   skills: [14],
+    //   amount: [1],
+    // );
+    // VroomJob job5 = VroomJob(
+    //   id: 5,
+    //   location:
+    //       ORSCoordinate(latitude: losangeles[0], longitude: losangeles[1]),
+    //   //delivery: DeliveryIDs,
+    //   service: 300,
+    //   skills: [14],
+    //   amount: [1],
+    // );
+
+    // jobs.add(job);
+    // jobs.add(job2);
+    // jobs.add(job3);
+    // jobs.add(job4);
+    // jobs.add(job5);
+
+    // List<VroomVehicle> vehicles = [];
+    // VroomVehicle vehicle = VroomVehicle(
+    //     id: 1,
+    //     start: ORSCoordinate(latitude: home[0], longitude: home[1]),
+    //     end: ORSCoordinate(latitude: home[0], longitude: home[1]),
+    //     capacity: [5],
+    //     skills: [1, 14]);
+    // vehicles.add(vehicle);
+
+    // OptimizationData output =
+    //     await client.optimizationDataPost(jobs: jobs, vehicles: vehicles);
+
+    // _outputDist = output.routes;
+
+    // print("optimaztion data: ");
+    // print(output.toJson());
+    // print(output.routes);
+    // print("---------22222----------------------");
+    // JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    // String prettyprint = encoder.convert(output.routes);
+    // debugPrint(prettyprint);
   }
 
   Future<void> sendMessage() async {
@@ -449,13 +637,20 @@ class DriverViewModel extends ChangeNotifier {
         accountSid:
             'AC38b957061479b4830ef4ec3c86265c0d', // replace *** with Account SID
         authToken:
-            '84540d2e7e217a509398613df62cc788', // replace xxx with Auth Token
+            'd76954ce79114d098fd0f6ec806783a1', // replace xxx with Auth Token
         twilioNumber: '+12567334284' // replace .... with Twilio Number
         );
 
+    String message =
+        "Hello ${_currentDelivery.name}, this is Michelle from TestingCounter. I'll be there in about $_curDistTime minutes with your TC@Home delivery. Thank you!";
+
+    if (_currentDelivery.instructions != null) {
+      message += "\n\nDelivery instruction: ${_currentDelivery.instructions}";
+    }
+
     await twilioFlutter.sendSMS(
-      toNumber: "6179357417",
-      messageBody: "Hello World",
+      toNumber: "6179357426",
+      messageBody: message,
     );
   }
 
@@ -464,9 +659,14 @@ class DriverViewModel extends ChangeNotifier {
         accountSid:
             'AC38b957061479b4830ef4ec3c86265c0d', // replace *** with Account SID
         authToken:
-            '84540d2e7e217a509398613df62cc788', // replace xxx with Auth Token
+            'd76954ce79114d098fd0f6ec806783a1', // replace xxx with Auth Token
         twilioNumber: '+12567334284' // replace .... with Twilio Number
         );
     await twilioFlutter.getSmsList();
+  }
+
+  double convertKmsToMiles(double kms) {
+    double miles = 0.000621371 * kms;
+    return miles;
   }
 }

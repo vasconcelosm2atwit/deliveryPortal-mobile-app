@@ -53,12 +53,15 @@ class _InitialScanPageState extends State<InitialScanPage> {
       });
     }
 
-    print("CORRECT");
-      setState(() {
-        _scanResult = barcodeScanRes;
-        widget.onScan(item.id!);
-        item.status = "ready";
-      });
+    // print("CORRECT");
+    //   setState(() {
+    //     _scanResult = barcodeScanRes;
+    //     widget.onScan(item.id!);
+    //     item.status = "ready";
+    //   });
+    print(
+        "---------------------------------------------------- BARCODE SCAN RESULT");
+    print(item.id);
     print(barcodeScanRes);
   }
 
