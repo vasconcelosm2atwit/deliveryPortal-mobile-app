@@ -41,7 +41,7 @@ class _ScanCurrentDeliveryState extends State<ScanCurrentDelivery> {
   }
 
   String _scanResult = "";
-  void scanBarcode(Item item, context) async {
+  void scanBarcode(Item item, context, dvm) async {
     // FlutterBarcodeScanner.getBarcodeStreamReceiver("#ff6666", "Cancel", false, ScanMode.DEFAULT)
     //      !.listen((barcode) {
     //       print(barcode);
@@ -62,7 +62,7 @@ class _ScanCurrentDeliveryState extends State<ScanCurrentDelivery> {
 
   @override
   Widget build(BuildContext context) {
-    //final dvm = Provider.of<DriverViewModel>(context);
+    final dvm = Provider.of<DriverViewModel>(context);
     return Scaffold(
         backgroundColor: const Color(0xff080613),
         appBar: AppBar(
@@ -96,7 +96,7 @@ class _ScanCurrentDeliveryState extends State<ScanCurrentDelivery> {
                       onTap: () {
                         //print(widget.items[index].id);
                         if (widget.items[index].status != "scanned") {
-                          scanBarcode(widget.items[index], context);
+                          scanBarcode(widget.items[index], context, dvm);
                         }
                       },
                       child: Card(

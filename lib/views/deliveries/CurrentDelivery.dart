@@ -437,8 +437,8 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
         .updateItemStatus(itemID, 'scanned');
   }
 
-  Widget timeLineWidgets(
-      vm, currentDelivery, start_icon, scan_icon, end_icon, loadingItems) {
+  Widget timeLineWidgets(DriverViewModel vm, currentDelivery, start_icon,
+      scan_icon, end_icon, loadingItems) {
     return loadingItems
         ? Center(child: CircularProgressIndicator())
         : ListView(
@@ -448,8 +448,23 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
             children: [
               InkWell(
                 splashColor: Colors.purple,
-                onTap: () {
+                onTap: () async {
                   // print(vm.currentItemList);
+                  print("starting pos --------------------------------------");
+                  //vm.checkLocationPermission();
+                  await vm.determineCurrentPosition();
+                  print("current pos --------------------------------------");
+                  //print(vm.currentListTitle);
+                  print("open route START");
+                  //await vm.openroutetest();
+                  print("open rout END");
+                  debugPrint(
+                      "DEBUG PRINT --------------------------------------");
+                  //vm.sendMessage();
+                  print("send message END");
+                  vm.checkDistanceBetween();
+                  //print(t);
+                  print("send test END");
 
                   // dialog asking if user wants to start delivery
                   if (currentDelivery.status == "todo") {
@@ -535,7 +550,7 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
               InkWell(
                 onTap: () {
                   //Provider.of<DriverViewModel>(context, listen: false);
-                  if(vm.completedDeliveriesCount == 1){
+                  if (vm.completedDeliveriesCount == 1) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -547,14 +562,15 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                             TextButton(
                               child: Text("Yes"),
                               onPressed: () {
-                               if (currentDelivery.status == "started") {
+                                if (currentDelivery.status == "started") {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ScanCurrentDelivery(
-                                            items: vm.currentItemList,
-                                            onScan: updateItemScanned,
-                                            delivery: currentDelivery)),
+                                        builder: (context) =>
+                                            ScanCurrentDelivery(
+                                                items: vm.currentItemList,
+                                                onScan: updateItemScanned,
+                                                delivery: currentDelivery)),
                                   );
                                   var count = 0;
                                   for (var item in vm.currentItemList) {
@@ -563,12 +579,13 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                                     }
                                   }
                                   if (count == vm.currentItemList.length) {
-                                    vm.updateDelivery(currentDelivery.id, "scanned");
+                                    vm.updateDelivery(
+                                        currentDelivery.id, "scanned");
                                   }
                                   setState(() {
-                                  //hovered = hovered ? false : true;
-                                  scan_icon = Icons.check;
-                                });
+                                    //hovered = hovered ? false : true;
+                                    scan_icon = Icons.check;
+                                  });
                                 }
                               },
                             ),
@@ -582,27 +599,27 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                         );
                       },
                     );
-                  }else{
+                  } else {
                     if (currentDelivery.status == "started") {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ScanCurrentDelivery(
-                              items: vm.currentItemList,
-                              onScan: updateItemScanned,
-                              delivery: currentDelivery)),
-                    );
-                    var count = 0;
-                    for (var item in vm.currentItemList) {
-                      if (item.status == "scanned") {
-                        count++;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScanCurrentDelivery(
+                                items: vm.currentItemList,
+                                onScan: updateItemScanned,
+                                delivery: currentDelivery)),
+                      );
+                      var count = 0;
+                      for (var item in vm.currentItemList) {
+                        if (item.status == "scanned") {
+                          count++;
+                        }
+                      }
+                      if (count == vm.currentItemList.length) {
+                        vm.updateDelivery(currentDelivery.id, "scanned");
                       }
                     }
-                    if (count == vm.currentItemList.length) {
-                      vm.updateDelivery(currentDelivery.id, "scanned");
-                    }
-                  }
-                  //vm.updateDelivery(currentDelivery.id, "scanned");
+                    //vm.updateDelivery(currentDelivery.id, "scanned");
                   }
                 },
                 child: TimelineTile(
@@ -676,9 +693,9 @@ class _CurrentDeliveryPageState extends State<CurrentDeliveryPage> {
                                   vm.getTopItem();
                                   Navigator.of(context).pop();
                                   setState(() {
-                                  //hovered = hovered ? false : true;
-                                  end_icon = Icons.check;
-                                });
+                                    //hovered = hovered ? false : true;
+                                    end_icon = Icons.check;
+                                  });
                                 },
                               ),
                               TextButton(
