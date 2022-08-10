@@ -1,7 +1,4 @@
 # Mobile app for DeliveryPortal
+## Step by step delivery process 
 
-A new Flutter project.
-### WORK IN PROGRESS
-
-
-<img src="https://user-images.githubusercontent.com/71852277/175813287-4be130e7-65ad-4582-ba0c-706377a000cf.jpg" width="500" height="1000" />
+![Screenshot from 2022-07-25 01-58-58](https://user-images.githubusercontent.com/71852277/184037546-a0d9a1cf-8af2-4df6-ae78-b2eda89c08c1.png)
